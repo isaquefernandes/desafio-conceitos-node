@@ -8,7 +8,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 const repositories = [];
 
 function isValidId(request, response, next) {
@@ -32,9 +31,7 @@ app.get("/repositories", (request, response) => {
 
 app.post("/repositories", (request, response) => {
   const { title, url, techs } = request.body;
-  const techArray = techs.split(',').map(tech => tech.trim());
-
-  const repository = { id: uuid(), title, url, techArray, likes: 0 };
+  const repository = { id: uuid(), title, url, techs, likes: 0 };
 
   repositories.push(repository);
 
@@ -43,10 +40,7 @@ app.post("/repositories", (request, response) => {
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
-  const { title, url} = request.body;
-  let { techs } = request.body;
-
-  techs = techs.split(',').map(tech => tech.trim());
+  const { title, url, techs } = request.body;
 
   const repositoryIndex = repositories.findIndex(repository => repository.id === id);
 
