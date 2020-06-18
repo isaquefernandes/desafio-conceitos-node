@@ -8,18 +8,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/repositories/:id', isValidId);
 
 const repositories = [];
 
 function isValidId(request, response, next) {
   const { id } = request.params;
-
+  
   if (!isUuid(id))
-    return response.status(400).json({"error": "Invalid repository ID"})
+  return response.status(400).json({"error": "Invalid repository ID"})
   
   return next();
 }
+
+app.use('/repositories/:id', isValidId);
 
 app.get("/repositories", (request, response) => {
   const { title } = request.query;
@@ -76,7 +77,7 @@ app.delete("/repositories/:id", (request, response) => {
   if (repositoryIndex < 0)
     return response.status(400).json({ "error": "Repository not found."});
 
-  repositories.splice(repository => repository.id === id);
+  repositories.splice(repositoryIndex, 1);
    
   return response.status(204).send();
 });
